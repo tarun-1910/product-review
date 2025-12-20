@@ -25,12 +25,12 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewVoteRepository reviewVoteRepository;
 
     @Override
-    public Review addReview(ReviewDTO dto, Long userId) {
+    public Review addReview(Long productId,ReviewDTO dto, Long userId) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        Product product = productRepository.findById(dto.getProductId())
+        Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
         Review review = Review.builder()
@@ -78,5 +78,22 @@ public class ReviewServiceImpl implements ReviewService {
                     .userVote(userVote)
                     .build();
         }).toList();
+    }
+
+
+    @Override
+    public void deleteReview(Long reviewId, Long userId) {
+
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new RuntimeException("Review not found"));
+
+
+        if (!review.getUser().getId().equals(userId)) {
+            throw new RuntimeException("You are not allowed to delete this review");
+        }
+
+
+
+         reviewRepository.delete(review);
     }
 }

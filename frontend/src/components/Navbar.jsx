@@ -11,12 +11,17 @@ export default function Navbar() {
       <Link to="/" className="font-bold">Review System</Link>
 
       <div className="space-x-4">
-        <Link to="/products">Products</Link>
+        {user && (
+          <Link to="/products">Products</Link>
+        )}
 
         {user ? (
           <>
             <span>{user.email}</span>
-            <button onClick={logout} className="bg-red-500 px-3 py-1 rounded">
+            <button
+              onClick={logout}
+              className="bg-red-500 px-3 py-1 rounded"
+            >
               Logout
             </button>
           </>

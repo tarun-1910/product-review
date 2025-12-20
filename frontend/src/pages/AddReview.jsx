@@ -1,14 +1,16 @@
 
 import { useState } from "react";
-
-
+import { useParams, useNavigate } from "react-router-dom";
 import { addReview } from "../api/reviewApi";
 
 
 
+
 export default function AddReview() {
+
+   const { productId } = useParams();
+   const  navigate = useNavigate();
   const [form, setForm] = useState({
-    productId: "",
     pros: "",
     cons: "",
     usedFor: "",
@@ -17,8 +19,14 @@ export default function AddReview() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await addReview(form);
+
+
+
+  //console.log("productId:", productId); // debug
+
+  await addReview(productId, form);
     alert("Review submitted!");
+    navigate(`/products/${productId}`);
   };
 
   return (
@@ -26,8 +34,7 @@ export default function AddReview() {
       <h1 className="text-xl mb-4">Add Review</h1>
 
       <form onSubmit={handleSubmit} className="space-y-3">
-        <input placeholder="Product ID" className="border p-2 w-full"
-          onChange={e => setForm({...form, productId: e.target.value})} />
+
 
         <input placeholder="Pros" className="border p-2 w-full"
           onChange={e => setForm({...form, pros: e.target.value})} />

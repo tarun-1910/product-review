@@ -8,6 +8,7 @@ import Register from "./pages/Register";
 import AddReview from "./pages/AddReview.jsx";
 import ProductDetails from "./pages/ProductDetails";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AddProduct from "./pages/AddProduct";
 
 
 
@@ -17,19 +18,27 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/products" element={<Products />} />
+        <Route path="/products" element={
+            <ProtectedRoute>
+                  <Products />
+            </ProtectedRoute>
+           } />
         <Route path="/products/:productId" element={<ProductDetails />} />
 
-         <Route path="/add-review" element={
-                    <ProtectedRoute>
-                      <AddReview />
-                    </ProtectedRoute>
-                  }
-          />
+       <Route path="/products/:productId/review" element={
+         <ProtectedRoute>
+           <AddReview />
+         </ProtectedRoute>
+       } />
 
-
-
-
+         <Route
+           path="/add-product"
+           element={
+             <ProtectedRoute>
+               <AddProduct />
+             </ProtectedRoute>
+           }
+         />
 
 
         <Route path="/login" element={<Login />} />

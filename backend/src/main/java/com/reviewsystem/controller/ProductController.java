@@ -8,7 +8,11 @@ import com.reviewsystem.service.ReviewService;
 import com.reviewsystem.dto.ReviewResponseDTO;
 import com.reviewsystem.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.security.Principal;
 
 
@@ -32,6 +36,16 @@ public class ProductController {
         return productService.getAllProducts();
     }
 
+    @GetMapping("/search")
+    public List<Product> searchProducts(
+            @RequestParam("q") String keyword
+    ) {
+        return productService.searchProducts(keyword);
+    }
+
+
+
+
     @GetMapping("/{productId}")
     public Product getProductById(@PathVariable Long productId) {
         return productService.getProductById(productId);
@@ -42,6 +56,36 @@ public class ProductController {
     public Product addProduct(@RequestBody ProductDTO dto) {
         return productService.addProduct(dto);
     }
+
+
+    @PostMapping("/{productId}/image")
+    public Product uploadProductImage(
+            @PathVariable Long productId,
+            @RequestParam("file") MultipartFile file
+    ) throws IOException {
+
+        System.out.println("IMAGE UPLOAD HIT");
+        System.out.println("Filename: " + file.getOriginalFilename());
+
+
+        return productService.uploadProductImage(productId, file);
+    }
+
+
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<?> deleteProduct(@PathVariable Long productId) {
+        productService.deleteProduct(productId);
+        return ResponseEntity.ok().build();
+    }
+
+
+
+
+
+
+
+
+
 
 
 

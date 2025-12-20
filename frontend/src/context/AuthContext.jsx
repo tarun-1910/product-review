@@ -13,17 +13,16 @@ export default function AuthProvider({ children }) {
 
    useEffect(() => {
       const token = localStorage.getItem("token");
-     // const email = localStorage.getItem("email");
+      // console.log("TOKEN ON REFRESH:", token);
 
       const userId = getUserIdFromToken();
+      //console.log("USER FROM TOKEN:", userId);
 
        if (token && userId) {
           setUser({ userId });
         }
 
-//       if (token && email) {
-//         setUser({ email });
-//       }
+
     }, []);
 
 

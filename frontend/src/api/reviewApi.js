@@ -1,13 +1,17 @@
 import api from "../api";
 
-export const addReview = (data) => api.post("/reviews", data);
-
+export const addReview = (productId, data) =>
+ api.post(`/reviews/product/${productId}`, data);
 
 
 
 export const getReviewsByProduct = (productId) =>
-  api.get(`/products/${productId}/reviews`);
+ api.get(`/reviews/product/${productId}`);
 
+
+
+export const deleteReview = (reviewId) =>
+  api.delete(`/reviews/${reviewId}`);
 
 
 
