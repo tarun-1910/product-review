@@ -15,4 +15,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
         WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%'))
     """)
     List<Product> searchByName(@Param("keyword") String keyword);
+    List<Product> findByUserId(Long userId);
 }

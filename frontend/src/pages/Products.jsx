@@ -1,7 +1,10 @@
 import { useEffect, useState, useContext } from "react";
-import { getAllProducts, deleteProduct } from "../api/productApi";
+
+import { getMyProducts, deleteProduct } from "../api/productApi";
+
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+
 
 export default function Products() {
   const [products, setProducts] = useState([]);
@@ -9,7 +12,7 @@ export default function Products() {
   const { isAuthenticated } = useContext(AuthContext);
 
   const loadProducts = () => {
-    getAllProducts()
+    getMyProducts()
       .then(res => setProducts(res.data))
       .catch(() => setError("Failed to load products"));
   };

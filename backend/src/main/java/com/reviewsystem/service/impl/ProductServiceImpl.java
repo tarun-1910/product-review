@@ -2,6 +2,7 @@ package com.reviewsystem.service.impl;
 
 import com.reviewsystem.dto.ProductDTO;
 import com.reviewsystem.entity.Product;
+import com.reviewsystem.entity.User;
 import com.reviewsystem.exception.ResourceNotFoundException;
 import com.reviewsystem.repository.ProductRepository;
 import com.reviewsystem.service.FileStorageService;
@@ -24,16 +25,30 @@ public class ProductServiceImpl implements ProductService {
     private final FileStorageService fileStorageService;
 
 
+
+
     @Override
-    public Product addProduct(ProductDTO dto) {
+    public Product addProduct(ProductDTO dto, User user) {
 
         Product product = Product.builder()
                 .name(dto.getName())
                 .description(dto.getDescription())
+                .user(user)
                 .build();
 
         return productRepository.save(product);
     }
+
+    public List<Product> getProductsByUser(Long userId) {
+        return productRepository.findByUserId(userId);
+    }
+
+
+
+
+
+
+
 
     @Override
     public Product uploadProductImage(Long productId, MultipartFile file) {
@@ -42,7 +57,8 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
         try {
-            String imagePath = fileStorageService.store(file, productId);
+            String imagePath = fileStorageService.storeProductImage(file, productId);
+
             product.setImageUrl(imagePath);
             return productRepository.save(product);
         } catch (IOException e) {

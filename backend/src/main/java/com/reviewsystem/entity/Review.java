@@ -6,7 +6,12 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "reviews")
+@Table(
+        name = "reviews",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"product_id", "user_id"})
+        }
+)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,6 +32,11 @@ public class Review {
 
     @Column(nullable=false)
     private Integer rating;
+
+
+    @Column(name = "image_url")
+    private String imageUrl;
+
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

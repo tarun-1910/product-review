@@ -9,6 +9,7 @@ import com.reviewsystem.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.List;
@@ -34,6 +35,39 @@ public class ReviewController {
         User user = userService.getUserByEmail(principal.getName());
         return reviewService.addReview(productId,dto, user.getId());
     }
+
+
+
+
+
+
+    @PostMapping(value = "/product/{productId}/with-image", consumes = "multipart/form-data")
+    public Review addReviewWithImage(
+
+            @PathVariable Long productId,
+            @RequestPart("data") ReviewDTO dto,
+            @RequestPart(value = "image", required = false) MultipartFile image,
+            Principal principal
+
+
+
+
+    ) {
+        System.out.println("🔥 CONTROLLER HIT");
+        System.out.println("➡️ productId = " + productId);
+
+
+        if (principal == null) {
+            throw new RuntimeException("Login required");
+        }
+
+        User user = userService.getUserByEmail(principal.getName());
+        return reviewService.addReviewWithImage(productId, dto, user.getId(), image);
+    }
+
+
+
+
 
 
     @GetMapping("/product/{productId}")
@@ -66,6 +100,23 @@ public class ReviewController {
         reviewService.deleteReview(reviewId, user.getId());
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/product/{productId}/search")
+    public List<ReviewResponseDTO> searchReviewsInProduct(
+            @PathVariable Long productId,
+            @RequestParam String q,
+            Principal principal
+    ) {
+        Long userId = null;
+
+        if (principal != null) {
+            userId = userService.getUserByEmail(principal.getName()).getId();
+        }
+
+        return reviewService.searchReviewsInProduct(productId, q, userId);
+    }
+
+
 
 
 }

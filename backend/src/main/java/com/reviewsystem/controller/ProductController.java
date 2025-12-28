@@ -53,9 +53,28 @@ public class ProductController {
 
 
     @PostMapping
-    public Product addProduct(@RequestBody ProductDTO dto) {
-        return productService.addProduct(dto);
+    public Product addProduct(
+            @RequestBody ProductDTO dto,
+            Principal principal
+    ) {
+        if (principal == null) {
+            throw new RuntimeException("Login required");
+        }
+
+        User user = userService.getUserByEmail(principal.getName());
+        return productService.addProduct(dto, user);
     }
+
+    @GetMapping("/my")
+    public List<Product> getMyProducts(Principal principal) {
+        if (principal == null) {
+            throw new RuntimeException("Login required");
+        }
+
+        User user = userService.getUserByEmail(principal.getName());
+        return productService.getProductsByUser(user.getId());
+    }
+
 
 
     @PostMapping("/{productId}/image")

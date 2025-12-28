@@ -1,55 +1,64 @@
-import { createContext, useState,useEffect } from "react";
+import { createContext, useState, useEffect } from "react";
 import { getUserIdFromToken } from "../utils/jwtUtils";
-import React from "react";
 
 export const AuthContext = createContext();
 
 export default function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [authReady, setAuthReady] = useState(false);
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
 
+    if (!token) {
+      setAuthReady(true);
+      return;
+    }
 
+    const decoded = getUserIdFromToken();
+    // decoded = { userId, email, fullName }
 
+    if (decoded?.userId) {
+      setUser({
+        userId: decoded.userId,
+        email: decoded.email,
+        fullName: decoded.fullName
+      });
+    }
 
-   useEffect(() => {
-      const token = localStorage.getItem("token");
-      // console.log("TOKEN ON REFRESH:", token);
+    setAuthReady(true);
+  }, []);
 
-      const userId = getUserIdFromToken();
-      //console.log("USER FROM TOKEN:", userId);
+  const login = () => {
+    const decoded = getUserIdFromToken();
 
-       if (token && userId) {
-          setUser({ userId });
-        }
+    if (!decoded?.userId) return;
 
-
-    }, []);
-
-
-
-  const login = (email) => {
-       localStorage.setItem("email", email);
-       setUser({ email });
-    };
-
+    setUser({
+      userId: decoded.userId,
+      email: decoded.email,
+      fullName: decoded.fullName
+    });
+  };
 
   const logout = () => {
-     localStorage.removeItem("token");
-     localStorage.removeItem("email");
-      setUser(null);
-   };
-
+    localStorage.removeItem("token");
+    localStorage.removeItem("email");
+    setUser(null);
+  };
 
   return (
     <AuthContext.Provider
-     value={{
-         user,
-         userId: user?.userId,
-         isAuthenticated: !!user,
-         login,
-         logout
-          }}
-     >
+      value={{
+        user,
+        userId: user?.userId ?? null,   // ✅ NUMBER
+        email: user?.email ?? null,
+        isAuthenticated: !!user,
+        authReady,
+        login,
+        logout
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

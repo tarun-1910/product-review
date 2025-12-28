@@ -20,4 +20,5 @@ public class ReviewResponseDTO {
     private String authorName;
 
     private String userVote; // HELPFUL | NOT_HELPFUL | null
+    private String imageUrl;
 }

@@ -3,12 +3,12 @@ export function getUserIdFromToken() {
   if (!token) return null;
 
   try {
-    // JWT format: header.payload.signature
-    const payloadBase64 = token.split(".")[1];
-    const payloadJson = atob(payloadBase64);
-    const payload = JSON.parse(payloadJson);
-
-    return payload.userId || null;
+   const payload = JSON.parse(atob(token.split(".")[1]));
+       return {
+         userId: payload.userId,
+         email: payload.sub,
+         fullName: payload.fullName
+       };
   } catch (err) {
     console.error("Invalid token", err);
     return null;

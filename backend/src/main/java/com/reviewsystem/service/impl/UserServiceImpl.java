@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
             throw new ResourceNotFoundException("Invalid email or password");
         }
 
-        return jwtUtil.generateToken(user.getId(), user.getEmail());
+        return jwtUtil.generateToken(user.getId(), user.getEmail(), user.getFullName());
     }
 
     @Override

@@ -4,9 +4,10 @@ const API = "/products";
 
 export const getAllProducts = () => api.get(API);
 
+export const getMyProducts = () => api.get(`${API}/my`);
+
+
 export const getProduct = (id) => api.get(`${API}/${id}`);
-
-
 
 export const addProduct = (data) => api.post(API, data);
 

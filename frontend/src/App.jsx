@@ -17,18 +17,27 @@ function App() {
     <BrowserRouter>
       <Navbar />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={
+
+            <Home />
+
+        } />
         <Route path="/products" element={
-            <ProtectedRoute>
+              <ProtectedRoute>
                   <Products />
-            </ProtectedRoute>
-           } />
-        <Route path="/products/:productId" element={<ProductDetails />} />
+              </ProtectedRoute>
+         } />
+        <Route path="/products/:productId" element={
+           <ProtectedRoute>
+            <ProductDetails />
+
+           </ProtectedRoute>
+        } />
 
        <Route path="/products/:productId/review" element={
-         <ProtectedRoute>
-           <AddReview />
-         </ProtectedRoute>
+           <ProtectedRoute>
+                <AddReview />
+            </ProtectedRoute>
        } />
 
          <Route

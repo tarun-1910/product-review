@@ -1,6 +1,7 @@
 package com.reviewsystem.exception;
 
 import com.reviewsystem.dto.ApiResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +22,18 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ApiResponse handleGeneral(Exception ex) {
+    public ApiResponse handleGeneral(
+            Exception ex,
+            HttpServletRequest request
+    ) {
+        String path = request.getRequestURI();
+
+        // ✅ Ignore static resources completely
+        if (path.startsWith("/uploads") || path.equals("/favicon.ico")) {
+            return null; // VERY IMPORTANT
+        }
+
         return new ApiResponse("Something went wrong", false);
     }
-}
 
+}
