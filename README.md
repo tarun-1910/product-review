@@ -60,15 +60,7 @@ https://github.com/tarun-1910/frontend_rw
 - Duplicate Review Prevention
 - Proper Exception Handling
 
----
-
-## System Architecture
-
-Frontend (React)  
-⬇ REST API  
-Backend (Spring Boot)  
-⬇  
-MySQL Database  
+ 
 
 ---
 
@@ -79,3 +71,14 @@ MySQL Database
 ```bash
 cd backend
 mvn spring-boot:run
+```
+
+---
+
+### Frontend Setup
+```
+cd frontend
+npm install
+npm run dev
+```
+
